@@ -9,4 +9,11 @@ public class FishTile {
      * boolean exists(if it exists or not)
      *
      **/
+    private boolean exists;
+    private int[][][] position;
+
+    public FishTile(){
+
+    }
+
 }
