@@ -40,7 +40,9 @@ public class FishGameState {
     //Check if there is still at least one valid move on the board.
     private boolean validMoves;
 
-    private FishTile[][][] boardState;
+    //FishTile[][] is a 2d array that stores the location of the hexagons
+    private FishTile[][] boardState;
+    //FishPenguin[][] is a 2d array to stores each player's penguins.
     private FishPenguin[][] pieceArray;
 
 
@@ -53,10 +55,11 @@ public class FishGameState {
         this.player4Score = 0;
         this.gamePhase = 0;
         this.validMoves = true;
-
+        this.boardState = initializeBoard();
+        this.pieceArray = intializePieces();
     }
 
-    // copy constructor
+    // copy constructor. Copies values from o to a new instance of the game state
     public FishGameState(FishGameState o){
         this.playerTurn = o.playerTurn;
         this.player1Score = o.player1Score;
@@ -65,16 +68,31 @@ public class FishGameState {
         this.player4Score = o.player4Score;
         this.gamePhase = o.gamePhase;
         this.validMoves = o.validMoves;
+        this.boardState = o.boardState;
+        this.pieceArray = o.pieceArray;
     }
+
     @Override
     public String toString(){
         return "";
     }
 
-    private FishTile[][][] initializeBoard(){
-        FishTile[][][] f;
+    /**
+     action methods will go underneath this comment.
+     */
+
+
+    //Helper methods to initialize the board state
+    private FishTile[][] initializeBoard(){
+        FishTile[][] f = new FishTile[][]{};
 
 
         return f;
+    }
+
+    private FishPenguin[][] intializePieces(){
+        FishPenguin[][] p = new FishPenguin[][]{};
+
+        return p;
     }
 }
