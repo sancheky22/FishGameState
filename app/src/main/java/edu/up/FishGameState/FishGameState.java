@@ -61,15 +61,15 @@ public class FishGameState {
 
     // copy constructor. Copies values from o to a new instance of the game state
     public FishGameState(FishGameState o){
-        this.playerTurn = o.playerTurn;
-        this.player1Score = o.player1Score;
-        this.player2Score = o.player2Score;
-        this.player3Score = o.player3Score;
-        this.player4Score = o.player4Score;
-        this.gamePhase = o.gamePhase;
-        this.validMoves = o.validMoves;
-        this.boardState = o.boardState;
-        this.pieceArray = o.pieceArray;
+        this.playerTurn = o.getPlayerTurn();
+        this.player1Score = o.getPlayer1Score();
+        this.player2Score = o.getPlayer2Score();
+        this.player3Score = o.getPlayer3Score();
+        this.player4Score = o.getPlayer4Score();
+        this.gamePhase = o.getGamePhase();
+        this.validMoves = o.getValidMoves();
+        this.boardState = o.getBoardState();
+        this.pieceArray = o.getPieceArray();
     }
 
     @Override
