@@ -80,7 +80,13 @@ public class FishGameState {
     /**
      action methods will go underneath this comment.
      */
+    public boolean placePenguin(){
+        return false;
+    }
 
+    public boolean movePenguin(){
+        return false;
+    }
 
     //Helper methods to initialize the board state
     private FishTile[][] initializeBoard(){
@@ -94,5 +100,45 @@ public class FishGameState {
         FishPenguin[][] p = new FishPenguin[][]{};
 
         return p;
+    }
+
+    /**
+     * Getter methods for instance variables
+     */
+
+    public int getPlayerTurn() {
+        return this.playerTurn;
+    }
+
+    public int getPlayer1Score(){
+        return this.player1Score;
+    }
+
+    public int getPlayer2Score() {
+        return this.player2Score;
+    }
+
+    public int getPlayer3Score(){
+        return this.player3Score;
+    }
+
+    public int getPlayer4Score(){
+        return this.player4Score;
+    }
+
+    public int getGamePhase(){
+        return this.gamePhase;
+    }
+
+    public boolean getValidMoves(){
+        return this.validMoves;
+    }
+
+    public FishTile[][] getBoardState(){
+        return this.boardState;
+    }
+
+    public FishPenguin[][] getPieceArray(){
+        return this.pieceArray;
     }
 }
