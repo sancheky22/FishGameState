@@ -19,16 +19,30 @@ public class FishTile {
      */
 
     private boolean exists;
-    int value;
-    int x;
-    int y;
+    private boolean hasPenguin;
+    private int value;
+    private int x;
+    private int y;
 
     public FishTile(int x, int y){
         this.x = x;
         this.y = y;
         this.exists = true;
+        this.hasPenguin = false;
         //needs to be [1-3] not just 3 but we can work on that later
         this.value = 3;
+    }
+
+    public int getX(){
+        return this.x;
+    }
+
+    public boolean getExists(){
+        return this.exists;
+    }
+
+    public boolean isHasPenguin(){
+        return hasPenguin;
     }
 
 }
