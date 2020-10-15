@@ -168,7 +168,7 @@ public class FishGameState {
             //if s is positive, then you are moving to the right
             int s = Integer.signum(x-p.getX());
             for (int i = p.getX()+s; i == x; i+=s){
-                if (boardState[i][p.getY()].hasPenguin() || !boardState[i][p.getY()].doesExist()){
+                if (this.boardState[i][p.getY()].hasPenguin() || !this.boardState[i][p.getY()].doesExist()){
                     return false;
                 }
             }
@@ -177,7 +177,7 @@ public class FishGameState {
         else if (direction == 1){
             int s = Integer.signum(y-p.getY());
             for (int i = p.getY()+s; i == y; i+=s){
-                if (boardState[p.getX()][i].hasPenguin() || !boardState[p.getX()][i].doesExist()){
+                if (this.boardState[p.getX()][i].hasPenguin() || !this.boardState[p.getX()][i].doesExist()){
                     return false;
                 }
             }
@@ -186,7 +186,7 @@ public class FishGameState {
         else {
             int s = Integer.signum((y-x) - (p.getY()-p.getX()));
             for (int i = 0; i == abs(x-p.getX()); i++){
-                if (boardState[p.getX()+i][p.getY()+i].hasPenguin() || !boardState[p.getX()+i][p.getY()+i].doesExist()){
+                if (this.boardState[p.getX()+i][p.getY()+i].hasPenguin() || !this.boardState[p.getX()+i][p.getY()+i].doesExist()){
                     return false;
                 }
             }
