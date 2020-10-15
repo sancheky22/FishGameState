@@ -1,5 +1,8 @@
 package edu.up.FishGameState;
 
+import java.lang.Integer;
+import static java.lang.Math.*;
+
 /**
  * @author Kyle Sanchez
  * @author Ryan Enslow
@@ -92,13 +95,21 @@ public class FishGameState {
     }
 
     public boolean movePenguin(FishPenguin p, int x, int y){
+        //Make sure the penguin is not moving to the same tile
+        if(p.getX() == x && p.getY() == y){
+            return false;
+        }
+        //Make sure that the space you are moving to exists (might be redundant later im not sure)
+        if (!this.boardState[x][y].getExists()){
+            return false;
+        }
         //0 means horizontal, 1 means down right diag, 2 means up right diag
         int direction;
-        if (p.getX() == x){
-            direction = 1;
-        }
-        else if (p.getY() == y){
+        if (p.getY() == y){
             direction = 0;
+        }
+        else if (p.getX() == x){
+            direction = 1;
         }
         else if (p.getY()+p.getX() == x+y){
             direction = 2;
@@ -107,59 +118,87 @@ public class FishGameState {
             return false;
         }
 
+        //TODO make sure that the action is a legal move
+        //If the new move is horizontal
         if (direction == 0){
-            for (int i = p.getX()+1; i < x; i++){
+            //s is the sign of (new coordinate - old coordinate)
+            //if s is positive, then you are moving to the right
+            int s = Integer.signum(x-p.getX());
+            for (int i = p.getX()+s; i == x; i+=s){
                 if (boardState[i][p.getY()].isHasPenguin() || !boardState[i][p.getY()].getExists()){
                     return false;
                 }
             }
+            return true;
         }
-
-        if (!this.boardState[x][y].getExists()){
-            return false;
+        //If the new move is vertical (down right diag)
+        else if (direction == 1){
+            int s = Integer.signum(y-p.getY());
+            for (int i = p.getY()+s; i == y; i+=s){
+                if (boardState[p.getX()][i].isHasPenguin() || !boardState[p.getX()][i].getExists()){
+                    return false;
+                }
+            }
+            return true;
         }
-
-
-
-        return false;
+        //If the new move is up right diag
+        else {
+            int s = Integer.signum((y-x) - (p.getY()-p.getX()));
+            for (int i = 0; i == abs(x-p.getX()); i++){
+                if (boardState[p.getX()+i][p.getY()+i].isHasPenguin() || !boardState[p.getX()+i][p.getY()+i].getExists()){
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
-    /**
-     * so basically the way to board works is that you construct a 2d array but you add an offset after two rows.
-     *      * It looks like this:
-     *      * x x 0 0 0 0
-     *      * x x 0 0 0 0
-     *      * x 0 0 0 0 x
-     *      * x 0 0 0 0 x
-     *      * 0 0 0 0 x x
-     *      * 0 0 0 0 x x
-     *      * where the x's represent null cells in the array.
-     *      *
-     *      * Each hexagon is connected to 6 other hexagons. In this array a hexagons neighbors look like this:
-     *      *
-     *      *
-     *      * x 0 0
-     *      * 0 H 0
-     *      * 0 0 x
-     *      *
-     *      * With this arrangement, increments along the columns correspond to movements down to the right along a straight line in the tiling.
-     *      * To find straight lines along the other axis, you just go diagonally up to the left.
-     *      * This makes it very easy to find out if a path traced along the array is in a straight line or not.
-     *      *
-     *      * The nice thing about Hey That's My Fish is that the board size is constant: 4 lines of 8 hexes and 4 lines of 7 hexes alternating
-     *      * So we know exactly which spaces need to be null. Thus we have an array of
-     */
+    /*** so basically the way to board works is that you construct a 2d array but you add an offset after two rows.
+    *      * It looks like this:
+    *      * x x 0 0 0 0
+    *      * x x 0 0 0 0
+    *      * x 0 0 0 0 x
+    *      * x 0 0 0 0 x
+    *      * 0 0 0 0 x x
+    *      * 0 0 0 0 x x
+    *      * where the x's represent null cells in the array
+    *      *
+    *      * Each hexagon is connected to 6 other hexagons. In this array a hexagons neighbors look like this:
+    *      *
+    *      * x 0 0
+    *      * 0 H 0
+    *      * 0 0 x
+    *      *
+    *      * With this arrangement, increments along the columns correspond to movements down to the right along a straight line in the tiling.
+    *      * To find straight lines along the other axis, you just go diagonally up to the left.
+    *      * This makes it very easy to find out if a path traced along the array is in a straight line or not.
+    *      *
+    *      * The nice thing about Hey That's My Fish is that the board size is constant: 4 lines of 8 hexes and 4 lines of 7 hexes alternating
+    *      * So we know exactly which spaces need to be null. Thus we have an array of
+     *      */
     private FishTile[][] initializeBoard(){
-        FishTile[][] f = new FishTile[8][12];
-        for (int i = 0; i < 7;i++)
+        int n;
+        int c;
+        FishTile t;
+        FishTile[][] f = new FishTile[8][11];
+        for (int i = 0; i <= 7;i++)
         {
-            //if i is even, then j starts at 0. This means that for even rows, there will be 8 iterations and 7 for odd loops.
-            for (int j = i%2; j < 11;i++)
+            //(i,n): (1,3), (2,3), (3,2), (4,2), (5,1)....
+            n = 4-((i+1)+(i+1)%2)/2;
+            c = 0;
+            for (int j = 0; j <= 10;j++)
             {
-                f[i][j-(i/2)] = new FishTile(i,j);
+                if (n!=0 || c == (8 - i%2)) {
+                    t = null;
+                    n--;
+                }
+                else {
+                    t = new FishTile(i, j);
+                    c++;
+                }
+                f[i][j] = t;
             }
         }
-
         return f;
     }
 
