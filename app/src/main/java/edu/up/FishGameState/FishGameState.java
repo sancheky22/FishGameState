@@ -90,6 +90,7 @@ public class FishGameState {
     @Override
     public String toString(){
         Log.d("toString","\n");
+        StringBuilder h = helper();
         return "Player Turn: " + this.playerTurn + "\n" +
                 "Number of Players: " + this.numPlayers + "\n" +
                 "Player 1 Score: " + this.player1Score + "\n" +
@@ -97,7 +98,8 @@ public class FishGameState {
                 "Player 3 Score: " + this.player3Score + "\n" +
                 "Player 4 Score: " + this.player4Score + "\n" +
                 "Current Phase of the Game: " + this.gamePhase + "\n" +
-                "Are there valid moves left:" + this.validMoves + "\n";
+                "Are there valid moves left:" + this.validMoves + "\n" +
+                "This is the hexagon array visualized: " + "\n" + h.toString();
 
     }
     //FishTile[][] is a 2d array that stores the location of the hexagons
@@ -106,7 +108,7 @@ public class FishGameState {
    // private FishPenguin[][] pieceArray;
 
     public StringBuilder helper(){
-    StringBuilder s = new StringBuilder(" ");
+    StringBuilder s = new StringBuilder("");
         for(int i=0; i<boardState.length;i++){
             for(int j=0; j<boardState[0].length;j++)
             {
@@ -162,39 +164,59 @@ public class FishGameState {
         else{
             return false;
         }
-
-        //TODO make sure that the action is a legal move
         //If the new move is horizontal
         if (direction == 0){
             //s is the sign of (new coordinate - old coordinate)
             //if s is positive, then you are moving to the right
             int s = Integer.signum(x-p.getX());
             for (int i = p.getX()+s; i == x; i+=s){
-                if (boardState[i][p.getY()].isHasPenguin() || !boardState[i][p.getY()].getExists()){
+                if (boardState[i][p.getY()].hasPenguin() || !boardState[i][p.getY()].getExists()){
                     return false;
                 }
             }
-            return true;
         }
         //If the new move is vertical (down right diag)
         else if (direction == 1){
             int s = Integer.signum(y-p.getY());
             for (int i = p.getY()+s; i == y; i+=s){
-                if (boardState[p.getX()][i].isHasPenguin() || !boardState[p.getX()][i].getExists()){
+                if (boardState[p.getX()][i].hasPenguin() || !boardState[p.getX()][i].getExists()){
                     return false;
                 }
             }
-            return true;
         }
         //If the new move is up right diag
         else {
             int s = Integer.signum((y-x) - (p.getY()-p.getX()));
             for (int i = 0; i == abs(x-p.getX()); i++){
-                if (boardState[p.getX()+i][p.getY()+i].isHasPenguin() || !boardState[p.getX()+i][p.getY()+i].getExists()){
+                if (boardState[p.getX()+i][p.getY()+i].hasPenguin() || !boardState[p.getX()+i][p.getY()+i].getExists()){
                     return false;
                 }
             }
-            return true;
+        }
+
+        //If the move is legal, then add to the player's score the fish on the tile and remove the tile from the game
+        addScore(playerTurn,this.boardState[p.getX()][p.getY()].getValue());
+        this.boardState[p.getX()][p.getY()].setExists(false);
+        return true;
+    }
+
+
+    //Helper method that is called whenever a player's score needs to be incremented
+    //p = player's turn, s = score to be added
+    private void addScore(int pT, int s){
+        switch(pT){
+            case 0:
+                setPlayer1Score(getPlayer1Score()+s);
+                break;
+            case 1:
+                setPlayer2Score(getPlayer2Score()+s);
+                break;
+            case 2:
+                setPlayer3Score(getPlayer3Score()+s);
+                break;
+            case 3:
+                setPlayer4Score(getPlayer4Score()+s);
+                break;
         }
     }
 

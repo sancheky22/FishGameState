@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Creating new instance of the game state class
         FishGameState firstInstance = new FishGameState();
 
+        String fs = firstInstance.toString();
+        multiLineText.setText(fs);
+
         //Creating deep copy of firstInstance (This will be secondInstance)
         FishGameState secondInstance = new FishGameState(firstInstance);
 

@@ -37,12 +37,24 @@ public class FishTile {
         return this.x;
     }
 
+    public int getY() {
+        return this.y;
+    }
+
     public boolean getExists(){
         return this.exists;
     }
 
-    public boolean isHasPenguin(){
+    public boolean hasPenguin(){
         return hasPenguin;
+    }
+
+    public int getValue(){
+        return this.value;
+    }
+
+    public void setExists(boolean b){
+        this.exists = b;
     }
 
 }
