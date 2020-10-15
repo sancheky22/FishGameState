@@ -47,14 +47,16 @@ public class FishGameState {
     private int player2Score;
     private int player3Score;
     private int player4Score;
+
     //Stores the phase of the game (0: placement phase, 1: main game, 2: End game screen)
     private int gamePhase;
+
     //Check if there is still at least one valid move on the board.
     private boolean validMoves;
 
-    //FishTile[][] is a 2d array that stores the location of the hexagons
+    //FishTile[][] is a 2d array that stores the hexagons
     private FishTile[][] boardState;
-    //FishPenguin[][] is a 2d array to stores each player's penguins.
+    //FishPenguin[][] is a 2d array to store all the penguins.
     private FishPenguin[][] pieceArray;
 
 
@@ -69,8 +71,7 @@ public class FishGameState {
         this.gamePhase = 0;
         this.validMoves = true;
         this.boardState = initializeBoard();
-        this.pieceArray = null;
-                //initializePieces();
+        this.pieceArray = initializePieces(this.numPlayers);
     }
 
     // copy constructor. Copies values from o to a new instance of the game state
@@ -90,7 +91,7 @@ public class FishGameState {
     @Override
     public String toString(){
         Log.d("toString","\n");
-        StringBuilder h = helper();
+        StringBuilder h = boardStateString();
         return "Player Turn: " + this.playerTurn + "\n" +
                 "Number of Players: " + this.numPlayers + "\n" +
                 "Player 1 Score: " + this.player1Score + "\n" +
@@ -99,16 +100,12 @@ public class FishGameState {
                 "Player 4 Score: " + this.player4Score + "\n" +
                 "Current Phase of the Game: " + this.gamePhase + "\n" +
                 "Are there valid moves left:" + this.validMoves + "\n" +
-                "This is the hexagon array visualized: " + "\n" + h.toString();
+                "This is the hexagon array visualized (T's are tiles and N's are null): " + "\n" + h.toString();
 
     }
-    //FishTile[][] is a 2d array that stores the location of the hexagons
-    //private FishTile[][] boardState;
-    //FishPenguin[][] is a 2d array to stores each player's penguins.
-   // private FishPenguin[][] pieceArray;
 
-    public StringBuilder helper(){
-    StringBuilder s = new StringBuilder("");
+    public StringBuilder boardStateString(){
+    StringBuilder s = new StringBuilder();
         for(int i=0; i<boardState.length;i++){
             for(int j=0; j<boardState[0].length;j++)
             {
@@ -118,36 +115,37 @@ public class FishGameState {
                else{
                    s.append("T"); //tile is present on the board
                }
-
             }
             s.append("\n");
         }
         return s;
     }
+
     /**
-     action methods will go underneath this comment.
+     Action methods will go underneath this comment.
      */
 
     //Action: When the player moves a penguin onto the board at the beginning of the game.
     public boolean placePenguin(FishPenguin p, int x, int y) {
-        if (p.getOnBoard()){
+        if (p.isOnBoard()){
             return false;
         }
         else {
-            p.setxPos(x);
-            p.setyPos(y);
+            p.setXPos(x);
+            p.setYPos(y);
             return true;
         }
     }
 
     //Action: When the player moves a penguin p to the coordinate (x,y) in the hex board.
+    //After this action is taken, the original tile needs to be removed, the player's score needs to be updated, and the turn needs to be incremented.
     public boolean movePenguin(FishPenguin p, int x, int y){
         //Make sure the penguin is not moving to the same tile
         if(p.getX() == x && p.getY() == y){
             return false;
         }
         //Make sure that the space you are moving to exists (might be redundant later im not sure)
-        if (!this.boardState[x][y].getExists()){
+        if (!this.boardState[x][y].doesExist()){
             return false;
         }
         //0 means horizontal, 1 means down right diag, 2 means up right diag
@@ -170,7 +168,7 @@ public class FishGameState {
             //if s is positive, then you are moving to the right
             int s = Integer.signum(x-p.getX());
             for (int i = p.getX()+s; i == x; i+=s){
-                if (boardState[i][p.getY()].hasPenguin() || !boardState[i][p.getY()].getExists()){
+                if (boardState[i][p.getY()].hasPenguin() || !boardState[i][p.getY()].doesExist()){
                     return false;
                 }
             }
@@ -179,7 +177,7 @@ public class FishGameState {
         else if (direction == 1){
             int s = Integer.signum(y-p.getY());
             for (int i = p.getY()+s; i == y; i+=s){
-                if (boardState[p.getX()][i].hasPenguin() || !boardState[p.getX()][i].getExists()){
+                if (boardState[p.getX()][i].hasPenguin() || !boardState[p.getX()][i].doesExist()){
                     return false;
                 }
             }
@@ -188,15 +186,16 @@ public class FishGameState {
         else {
             int s = Integer.signum((y-x) - (p.getY()-p.getX()));
             for (int i = 0; i == abs(x-p.getX()); i++){
-                if (boardState[p.getX()+i][p.getY()+i].hasPenguin() || !boardState[p.getX()+i][p.getY()+i].getExists()){
+                if (boardState[p.getX()+i][p.getY()+i].hasPenguin() || !boardState[p.getX()+i][p.getY()+i].doesExist()){
                     return false;
                 }
             }
         }
 
-        //If the move is legal, then add to the player's score the fish on the tile and remove the tile from the game
+        //If the move is legal, then add to the player's score the fish on the tile and remove the tile from the game. Then pass the turn.
         addScore(playerTurn,this.boardState[p.getX()][p.getY()].getValue());
         this.boardState[p.getX()][p.getY()].setExists(false);
+        this.playerTurn = (this.playerTurn+1)%this.numPlayers;
         return true;
     }
 
@@ -220,40 +219,50 @@ public class FishGameState {
         }
     }
 
-    /** so basically the way to board works is that you construct a 2d array but you add an offset after two rows.
-    *      * It looks like this:
-    *      * x x 0 0 0 0
-    *      * x x 0 0 0 0
-    *      * x 0 0 0 0 x
-    *      * x 0 0 0 0 x
-    *      * 0 0 0 0 x x
-    *      * 0 0 0 0 x x
-    *      * where the x's represent null cells in the array
-    *      *
-    *      * Each hexagon is connected to 6 other hexagons. In this array a hexagons neighbors look like this:
-    *      *
-    *      * x 0 0
-    *      * 0 H 0
-    *      * 0 0 x
-    *      *
-    *      * With this arrangement, increments along the columns correspond to movements down to the right along a straight line in the tiling.
-    *      * To find straight lines along the other axis, you just go diagonally up to the left.
-    *      * This makes it very easy to find out if a path traced along the array is in a straight line or not.
-    *      *
-    *      * The nice thing about Hey That's My Fish is that the board size is constant: 4 lines of 8 hexes and 4 lines of 7 hexes alternating
-     *     */
+    /**
+     * This is what a 6x4 hexagon array looks like in our 2d array. 0's represent hexes and x's represent null spaces.
+     *      x x 0 0 0 0
+     *      x x 0 0 0 0
+     *      x 0 0 0 0 x
+     *      x 0 0 0 0 x
+     *      0 0 0 0 x x
+     *      0 0 0 0 x x
+     *
+     * The reason we choose to index them in this way is because we can easily check if a hexagon is adjacent to another hexagon.
+     * Each hex has 6 neighbors and they lok like this:
+     *
+     *  x 0 0
+     *  0 h 0
+     *  0 0 x
+     *
+     *  where h's neighbors are the 0's.
+     *  a nice consequence of this arrangement is that we can check if two hexagons lie on the same line very easily.
+     *  There are three axes that they could lie on: horizontal, upper right, and lower right
+     *  These correspond in the 2d array as: same x value, same y value, and same x+y value, respectively.
+     *  For example, if we have two hexagons at p1 = (2,4) and p2 = (5,4), then we know those two hexagons are on the same upper right line because y1=y2
+     */
+
+    //Helper method to initialize the board at the beginning of the game.
     private FishTile[][] initializeBoard(){
+        //n is the number of null cells you need at the beginning of the array
         int n;
+        //c is the number of real tiles you have in a specific row. If the row is even, c = 8, if row is odd c = 7
         int c;
         FishTile t;
         FishTile[][] f = new FishTile[BOARD_HEIGHT][BOARD_LENGTH];
+
+        //Loop through a 2d array and initialize each hexagon
         for (int i = 0; i <= BOARD_HEIGHT-1;i++)
         {
+            //Basically this value of n is based on i and it tells you how many null cells you need at the start of the row.
             //(i,n): (1,3), (2,3), (3,2), (4,2), (5,1)....
             n = 4-((i+1)+(i+1)%2)/2;
             c = 0;
             for (int j = 0; j <= BOARD_LENGTH-1;j++)
             {
+                //if n is not 0, then there are still null cells that must be placed into the array.
+                //if i is even then c will hit 8 and then will start inputting null cells to finalize the array.
+                //This all results in an array where the null cells are where they need to be, and an extra null cell for odd rows.
                 if (n!=0 || c == (8 - i%2)) {
                     t = null;
                     n--;
@@ -268,9 +277,23 @@ public class FishGameState {
         return f;
     }
 
-    private FishPenguin[][] initializePieces(){
-        FishPenguin[][] p = new FishPenguin[][]{};
-
+    /**
+     Helper method to initialize the array of penguin pieces that belong to each player. The first coordinate represents
+     the player number and the second coordinate represents the index of the penguin.
+     The parameter n in this context is the number of players (2-4)
+     The rules of the game state that for 2 player games, each player has 4 penguins. 3 players have 3 penguins each, and 4 players have 2 each.
+     These numbers are pretty arbitrary but it works out nicely because the follow a simple pattern: PenguinsPerPlayer = 6-numPlayers
+     */
+    private FishPenguin[][] initializePieces(int n){
+        int m = 6-n;
+        FishPenguin tempguin;
+        FishPenguin[][] p = new FishPenguin[n][m];
+        for (int i=0;i<p.length;i++){
+            for (int j=0;j<p[0].length;j++){
+                tempguin = new FishPenguin(i);
+                p[i][j] = tempguin;
+            }
+        }
         return p;
     }
 

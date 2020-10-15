@@ -15,10 +15,8 @@ public class FishPenguin {
     private boolean legalMoves;
 
     //Constructor for a penguin piece. Needs a player who placed it and the location it was placed in.
-    public FishPenguin(int playerNumber, int x, int y){
+    public FishPenguin(int playerNumber){
         this.player = playerNumber;
-        this.xPos = x;
-        this.yPos = y;
         this.onBoard = false;
         this.legalMoves = true;
     }
@@ -31,15 +29,36 @@ public class FishPenguin {
         return this.yPos;
     }
 
-    public boolean getOnBoard(){
+    public int getPlayer(){
+        return this.player;
+    }
+
+    public boolean hasLegalMoves(){
+        return this.legalMoves;
+    }
+
+    public boolean isOnBoard(){
         return this.onBoard;
     }
 
-    public void setxPos(int x){
+    public void setXPos(int x){
         this.xPos = x;
     }
 
-    public void setyPos(int y){
+    public void setYPos(int y){
         this.yPos = y;
+    }
+
+    //This method should probably never ever ever be called but its here anyways just in case i guess
+    public void setPlayer(int p){
+        this.player = p;
+    }
+
+    public void setOnBoard(boolean b){
+        this.onBoard = b;
+    }
+
+    public void setLegalMoves(boolean b){
+        this.legalMoves = b;
     }
 }
