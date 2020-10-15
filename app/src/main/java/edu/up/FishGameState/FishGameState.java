@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.lang.Integer;
 import static java.lang.Math.*;
+import java.lang.*;
 
 /**
  * @author Kyle Sanchez
@@ -97,7 +98,28 @@ public class FishGameState {
                 "Are there valid moves left:" + this.validMoves + "\n";
 
     }
+    //FishTile[][] is a 2d array that stores the location of the hexagons
+    //private FishTile[][] boardState;
+    //FishPenguin[][] is a 2d array to stores each player's penguins.
+   // private FishPenguin[][] pieceArray;
 
+    public StringBuilder helper(){
+    StringBuilder s = new StringBuilder(" ");
+        for(int i=0; i<boardState.length;i++){
+            for(int j=0; j<boardState[0].length;j++)
+            {
+               if(boardState[i][j] == null){
+                   s.append("N"); //null tile is on the board
+               }
+               else{
+                   s.append("T"); //tile is present on the board
+               }
+
+            }
+            s.append("\n");
+        }
+        return s;
+    }
     /**
      action methods will go underneath this comment.
      */
