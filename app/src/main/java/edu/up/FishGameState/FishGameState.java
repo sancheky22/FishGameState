@@ -1,5 +1,7 @@
 package edu.up.FishGameState;
 
+import android.util.Log;
+
 import java.lang.Integer;
 import static java.lang.Math.*;
 
@@ -32,6 +34,9 @@ public class FishGameState {
     //store the current players turn (0,1,2,3)
     private int playerTurn;
 
+    // number of players playing the game
+    private int numPlayers;
+
     //store scores for all players
     //Note: if the game has fewer than 4 players, then the non-existent player scores will stay at 0
     private int player1Score;
@@ -52,19 +57,23 @@ public class FishGameState {
     // Default constructor
     public FishGameState(){
         this.playerTurn = 0;
+        this.numPlayers = 0;
         this.player1Score = 0;
         this.player2Score = 0;
         this.player3Score = 0;
         this.player4Score = 0;
         this.gamePhase = 0;
         this.validMoves = true;
-        this.boardState = initializeBoard();
-        this.pieceArray = intializePieces();
+        this.boardState = null;
+                //initializeBoard();
+        this.pieceArray = null;
+                //intializePieces();
     }
 
     // copy constructor. Copies values from o to a new instance of the game state
     public FishGameState(FishGameState o){
         this.playerTurn = o.getPlayerTurn();
+        this.numPlayers = o.getNumPlayers();
         this.player1Score = o.getPlayer1Score();
         this.player2Score = o.getPlayer2Score();
         this.player3Score = o.getPlayer3Score();
@@ -77,7 +86,16 @@ public class FishGameState {
 
     @Override
     public String toString(){
-        return "";
+        Log.d("toString","\n");
+        return "Player Turn: " + this.playerTurn + "\n" +
+                "Number of Players: " + this.numPlayers + "\n" +
+                "Player 1 Score: " + this.player1Score + "\n" +
+                "Player 2 Score: " + this.player2Score + "\n" +
+                "Player 3 Score: " + this.player3Score + "\n" +
+                "Player 4 Score: " + this.player4Score + "\n" +
+                "Current Phase of the Game: " + this.gamePhase + "\n" +
+                "Are there valid moves left:" + this.validMoves + "\n";
+
     }
 
     /**
@@ -216,6 +234,10 @@ public class FishGameState {
         return this.playerTurn;
     }
 
+    public int getNumPlayers() {
+        return this.numPlayers;
+    }
+
     public int getPlayer1Score(){
         return this.player1Score;
     }
@@ -247,4 +269,49 @@ public class FishGameState {
     public FishPenguin[][] getPieceArray(){
         return this.pieceArray;
     }
+
+    /**
+     * Setter methods for instance variables
+     */
+
+    public void setPlayerTurn(int x) {
+        this.playerTurn = x;
+    }
+
+    public void setNumPlayers(int x) {
+       this.numPlayers = x;
+    }
+
+    public void setPlayer1Score(int x){
+        this.player1Score = x;
+    }
+
+    public void setPlayer2Score(int x) {
+        this.player2Score = x;
+    }
+
+    public void setPlayer3Score(int x){
+        this.player3Score = x;
+    }
+
+    public void setPlayer4Score(int x){
+        this.player4Score = x;
+    }
+
+    public void setGamePhase(int x){
+        this.gamePhase = x;
+    }
+
+    public void getValidMoves(boolean x){
+        this.validMoves = x;
+    }
+
+    /*
+    public void setBoardState(int x, int y){
+        this.boardState = FishTile[y][x];
+    }
+
+    public void setPieceArray(){
+        this.pieceArray = FishPenguin[][];
+    }*/
 }
