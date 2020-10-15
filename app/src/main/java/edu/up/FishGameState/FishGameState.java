@@ -31,6 +31,9 @@ public class FishGameState {
      boolean validmoves
      **/
 
+    final int BOARD_HEIGHT = 8;
+    final int BOARD_LENGTH = 11;
+
     //store the current players turn (0,1,2,3)
     private int playerTurn;
 
@@ -64,10 +67,9 @@ public class FishGameState {
         this.player4Score = 0;
         this.gamePhase = 0;
         this.validMoves = true;
-        this.boardState = null;
-                //initializeBoard();
+        this.boardState = initializeBoard();
         this.pieceArray = null;
-                //intializePieces();
+                //initializePieces();
     }
 
     // copy constructor. Copies values from o to a new instance of the game state
@@ -101,17 +103,20 @@ public class FishGameState {
     /**
      action methods will go underneath this comment.
      */
-    public boolean placePenguin(FishPenguin p, int x, int y){
+
+    //Action: When the player moves a penguin onto the board at the beginning of the game.
+    public boolean placePenguin(FishPenguin p, int x, int y) {
         if (p.getOnBoard()){
             return false;
         }
-        else{
+        else {
             p.setxPos(x);
             p.setyPos(y);
             return true;
         }
     }
 
+    //Action: When the player moves a penguin p to the coordinate (x,y) in the hex board.
     public boolean movePenguin(FishPenguin p, int x, int y){
         //Make sure the penguin is not moving to the same tile
         if(p.getX() == x && p.getY() == y){
@@ -171,7 +176,7 @@ public class FishGameState {
         }
     }
 
-    /*** so basically the way to board works is that you construct a 2d array but you add an offset after two rows.
+    /** so basically the way to board works is that you construct a 2d array but you add an offset after two rows.
     *      * It looks like this:
     *      * x x 0 0 0 0
     *      * x x 0 0 0 0
@@ -192,19 +197,18 @@ public class FishGameState {
     *      * This makes it very easy to find out if a path traced along the array is in a straight line or not.
     *      *
     *      * The nice thing about Hey That's My Fish is that the board size is constant: 4 lines of 8 hexes and 4 lines of 7 hexes alternating
-    *      * So we know exactly which spaces need to be null. Thus we have an array of
-     *      */
+     *     */
     private FishTile[][] initializeBoard(){
         int n;
         int c;
         FishTile t;
-        FishTile[][] f = new FishTile[8][11];
-        for (int i = 0; i <= 7;i++)
+        FishTile[][] f = new FishTile[BOARD_HEIGHT][BOARD_LENGTH];
+        for (int i = 0; i <= BOARD_HEIGHT-1;i++)
         {
             //(i,n): (1,3), (2,3), (3,2), (4,2), (5,1)....
             n = 4-((i+1)+(i+1)%2)/2;
             c = 0;
-            for (int j = 0; j <= 10;j++)
+            for (int j = 0; j <= BOARD_LENGTH-1;j++)
             {
                 if (n!=0 || c == (8 - i%2)) {
                     t = null;
@@ -220,7 +224,7 @@ public class FishGameState {
         return f;
     }
 
-    private FishPenguin[][] intializePieces(){
+    private FishPenguin[][] initializePieces(){
         FishPenguin[][] p = new FishPenguin[][]{};
 
         return p;
