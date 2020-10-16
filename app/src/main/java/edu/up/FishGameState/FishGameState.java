@@ -106,19 +106,34 @@ public class FishGameState {
 
     public StringBuilder boardStateString(){
     StringBuilder s = new StringBuilder();
-        for(int i=0; i<boardState.length;i++){
-            for(int j=0; j<boardState[0].length;j++)
-            {
-               if(boardState[i][j] == null){
-                   s.append("N"); //null tile is on the board
-               }
-               else{
-                   s.append("T"); //tile is present on the board
-               }
+
+        for(int i=0; i<boardState.length;i++) {
+            for (int j = 0; j < boardState[0].length; j++) {
+                if (boardState[i][j] == null) {
+                    s.append("N"); //null tile is on the board
+                } else {
+                    s.append("T"); //tile is present on the board
+                }
             }
             s.append("\n");
         }
+        s.append("\n");
+
+        s.append("This is the piece array visualized (The number is the penguin and N's are null):");
+        for(int k=0; k<pieceArray.length; k++){
+            for(int l=0; l<pieceArray[0].length;l++){
+                if(pieceArray[k][l] == null){
+                    s.append("N"); //null tile is on the board
+                }
+                else{
+                    s.append(this.pieceArray[k][l].getPlayer()); //penguins present
+                    }
+                }
+            s.append("\n");
+        }
+
         return s;
+
     }
 
     /**
@@ -373,7 +388,7 @@ public class FishGameState {
         this.gamePhase = x;
     }
 
-    public void getValidMoves(boolean x){
+    public void setValidMoves(boolean x){
         this.validMoves = x;
     }
 
