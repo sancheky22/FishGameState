@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Creating new instance of the game state class
         FishGameState firstInstance = new FishGameState();
+        //Creating deep copy of firstInstance (This will be secondInstance)
         FishGameState secondInstance = new FishGameState(firstInstance);
 
         firstInstance.setPlayer4Score(100);
@@ -55,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String fs = firstInstance.toString();
         multiLineText.setText(fs);
+
+        // Displaying that player 1 has made a move.
+        // This can be seen on lines 51 and 52
+        multiLineText.append("\nPlayer 1 has moved their piece from 3,3 to 4,4 \n\n");
 
         //Creating new instance of the game state class (Third Instance)
         FishGameState thirdInstance = new FishGameState();

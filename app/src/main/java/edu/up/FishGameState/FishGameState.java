@@ -16,21 +16,6 @@ import java.lang.*;
 
 public class FishGameState {
 
-    /** POSSIBLE INSTANCE VARS
-     private int playerTurn;
-     private int player1Score;
-     private int player2Score;
-     private int player3Score;
-     private int player4Score;
-
-
-
-     int for phase of game
-        * 0 placement phase
-        * 1 actual play
-        * 2 Avengers: EndGame
-     boolean validmoves
-     **/
 
     final int BOARD_HEIGHT = 8;
     final int BOARD_LENGTH = 11;
@@ -234,7 +219,21 @@ public class FishGameState {
         }
     }
 
+
+
     /**
+     * External Citation
+     * Date: October 12, 2020
+     * Problem: wanted to index a hexagonal tiling in a clever way.
+     * Resource: https://www.redblobgames.com/grids/hexagons/ ("Map storage in axial coordinates")
+     *
+     *
+     *
+     *
+     * Because there are three different independent directions player can move, we needed a third way to check if they
+     * were moving in a straight line. So the solution to this is to just model it cleverly as a 2d array by adding some offsets.
+     * The above resource explains it well, but basically it makes it very easy to check if you are moving in a striaght line.
+     *
      * This is what a 6x4 hexagon array looks like in our 2d array. 0's represent hexes and x's represent null spaces.
      *      x x 0 0 0 0
      *      x x 0 0 0 0
@@ -392,12 +391,5 @@ public class FishGameState {
         this.validMoves = x;
     }
 
-    /*
-    public void setBoardState(int x, int y){
-        this.boardState = FishTile[y][x];
-    }
 
-    public void setPieceArray(){
-        this.pieceArray = FishPenguin[][];
-    }*/
 }
