@@ -63,7 +63,8 @@ public class FishGameState {
     // Default constructor
     public FishGameState(){
         this.playerTurn = 0;
-        this.numPlayers = 0;
+        //numPlayers is set to 2 for the purpose of this assignment, but in the final project it can be set from 2-4
+        this.numPlayers = 2;
         this.player1Score = 0;
         this.player2Score = 0;
         this.player3Score = 0;
@@ -71,7 +72,7 @@ public class FishGameState {
         this.gamePhase = 0;
         this.validMoves = true;
         this.boardState = initializeBoard();
-        this.pieceArray = initializePieces(3);
+        this.pieceArray = initializePieces(this.numPlayers);
     }
 
     // copy constructor. Copies values from o to a new instance of the game state
@@ -100,7 +101,7 @@ public class FishGameState {
                 "Player 4 Score: " + this.player4Score + "\n" +
                 "Current Phase of the Game: " + this.gamePhase + "\n" +
                 "Are there valid moves left:" + this.validMoves + "\n" +
-                "This is the hexagon array visualized (T's are tiles and N's are null): " + "\n" + h.toString();
+                "This is the hexagon array visualized (T's are tiles and N's are null): " + "\n" + h.toString()+"\n";
 
     }
 

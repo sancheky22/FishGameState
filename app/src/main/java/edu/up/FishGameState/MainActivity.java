@@ -45,21 +45,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Creating new instance of the game state class
         FishGameState firstInstance = new FishGameState();
+        FishGameState secondInstance = new FishGameState(firstInstance);
+
+        firstInstance.setPlayer4Score(100);
+        firstInstance.placePenguin(firstInstance.getPieceArray()[0][0],3,3);
+        firstInstance.movePenguin(firstInstance.getPieceArray()[0][0],4,4);
+
+        // do some stuff to first instance
 
         String fs = firstInstance.toString();
         multiLineText.setText(fs);
-
-        //Creating deep copy of firstInstance (This will be secondInstance)
-        FishGameState secondInstance = new FishGameState(firstInstance);
-
-        // TODO: call methods
-        /**
-         *
-         * Here will be where we call each method in the game state class once,
-         * using "firstInstance"
-         *
-         * */
-
 
         //Creating new instance of the game state class (Third Instance)
         FishGameState thirdInstance = new FishGameState();
@@ -67,26 +62,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Creating deep copy of thirdInstance (This will be fourthInstance)
         FishGameState fourthInstance = new FishGameState(thirdInstance);
 
+
         // Calling the toString() method on secondInstance and fourthInstance
         String secondString = secondInstance.toString();
-
         String fourthString = fourthInstance.toString();
 
         //Checking if strings are identical using .equals()
         if(secondString.equals(fourthString)){
             // print message that they're equal
-            /**
-             * SOMETHING LIKE THIS:
-             *
-             * multiLineText.append("The second and fourth instance are equal");
-             *
-             * multiLineText.append("SecondInstance: \n");
-             * multiLineText.append(secondString + "\n");
-             * multiLineText.append("FourthInstance: \n");
-             * multiLineText.append(fourthString + "\n");
-             *
-             */
+
+              multiLineText.append("The second and fourth instance are equal \n");
+
+              multiLineText.append("SECOND INSTANCE: \n");
+              multiLineText.append(secondString + "\n");
+              multiLineText.append("FOURTH INSTANCE: \n");
+              multiLineText.append(fourthString + "\n");
+
+
         }else{
+            multiLineText.append("second and fourth instance are not equal\n");
             // print that they're not equal
         }
 
