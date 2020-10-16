@@ -1,5 +1,11 @@
 package edu.up.FishGameState;
 
+/**
+ * @author Kyle Sanchez
+ * @author Ryan Enslow
+ * @author Carina Pineda
+ * @author Linda Nguyen
+ **/
 
 public class FishTile {
 

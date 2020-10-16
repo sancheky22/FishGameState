@@ -8,6 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+
+/**
+ * @author Kyle Sanchez
+ * @author Ryan Enslow
+ * @author Carina Pineda
+ * @author Linda Nguyen
+ **/
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText multiLineText;
