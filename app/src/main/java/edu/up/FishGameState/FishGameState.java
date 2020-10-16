@@ -71,7 +71,7 @@ public class FishGameState {
         this.gamePhase = 0;
         this.validMoves = true;
         this.boardState = initializeBoard();
-        this.pieceArray = initializePieces(this.numPlayers);
+        this.pieceArray = initializePieces(3);
     }
 
     // copy constructor. Copies values from o to a new instance of the game state
@@ -117,9 +117,7 @@ public class FishGameState {
             }
             s.append("\n");
         }
-        s.append("\n");
-
-        s.append("This is the piece array visualized (The number is the penguin and N's are null):");
+        s.append("\n This is the piece array visualized (Amount of penguins per player and N's are null): \n");
         for(int k=0; k<pieceArray.length; k++){
             for(int l=0; l<pieceArray[0].length;l++){
                 if(pieceArray[k][l] == null){
