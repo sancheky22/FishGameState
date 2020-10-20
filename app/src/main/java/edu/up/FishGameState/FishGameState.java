@@ -71,8 +71,20 @@ public class FishGameState {
         this.player4Score = o.player4Score;
         this.gamePhase = o.gamePhase;
         this.validMoves = o.validMoves;
-        this.boardState = o.boardState;
-        this.pieceArray = o.pieceArray;
+
+        //Deep copies for array mean you have to loop through it and individually copy each element
+        this.boardState = new FishTile[BOARD_HEIGHT][BOARD_LENGTH];
+        for (int i=0;i<this.boardState.length;i++){
+            for(int j=0;j<this.boardState[0].length;j++){
+                this.boardState[i][j] = o.getBoardState()[i][j];
+            }
+        }
+        this.pieceArray = new FishPenguin[o.numPlayers][6-o.numPlayers];
+        for (int i=0;i<this.pieceArray.length;i++){
+            for(int j=0;j<this.pieceArray[0].length;j++){
+                this.pieceArray[i][j] = o.getPieceArray()[i][j];
+            }
+        }
     }
 
     @Override
