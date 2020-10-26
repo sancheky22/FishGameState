@@ -174,7 +174,7 @@ public class FishGameState {
         else{
             return false;
         }
-        //If the new move is horizontal
+        //If the new move is horizontal 
         if (direction == 0){
             //s is the sign of (new coordinate - old coordinate)
             //if s is positive, then you are moving to the right
